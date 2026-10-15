@@ -19,6 +19,7 @@ export interface ProductQuery {
   brand?: string;
   catalog?: string;
   promo?: string;
+  published?: string;
   sort?: string;
   page?: number;
   limit?: number;
@@ -40,6 +41,8 @@ function escapeRegex(text: string): string {
 function buildFilter(q: ProductQuery): FilterQuery<IProduct> {
   const filter: FilterQuery<IProduct> = {};
   if (!q.includeUnpublished) filter.isPublished = true;
+  // Solo el admin ve ocultos; ahí puede filtrar por publicados u ocultos.
+  else if (q.published === "1" || q.published === "0") filter.isPublished = q.published === "1";
   if (q.species) filter.species = { $in: q.species.split(",") };
   if (q.type) filter.type = { $in: q.type.split(",") };
   if (q.category) filter.categorySlug = { $in: q.category.split(",") };
