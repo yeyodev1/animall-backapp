@@ -60,14 +60,17 @@ async function main() {
         name: row.name,
         brand: row.brand ?? "",
         manufacturer: row.manufacturer ?? "",
-        category: row.category ?? "",
-        categorySlug: slugify(row.category ?? ""),
+        // Cinco productos del catálogo vienen sin franja de categoría.
+        category: row.category || "Otros productos",
+        categorySlug: slugify(row.category || "Otros productos"),
         species: row.species ?? "general",
         type: row.type ?? "otro",
         catalogs: row.catalogs ?? [],
+        // Sin precio de funda (limpieza, fundas, insumos) se usa el precio Animall:
+        // así no se muestra un tachado inventado.
         variants: (row.variants ?? []).map((v: any) => ({
-          size: v.size,
-          pvp: v.pvp ?? 0,
+          size: v.size || "Presentación única",
+          pvp: v.pvp ?? v.pvc ?? 0,
           pvc: v.pvc ?? v.pvp ?? 0,
           promo: v.promo && v.promo !== "-" ? v.promo : null,
         })),
