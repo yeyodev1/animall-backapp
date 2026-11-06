@@ -3,6 +3,7 @@ import { authMiddleware } from "../middlewares/auth.middleware";
 import { adminMiddleware } from "../middlewares/admin.middleware";
 import { uploadMiddleware } from "../middlewares/upload.middleware";
 import * as adminController from "../controllers/admin.controller";
+import * as settingsController from "../controllers/settings.controller";
 
 const router = Router();
 
@@ -16,5 +17,6 @@ router.delete("/products/:id", adminController.deleteProduct);
 router.post("/products/:id/image", uploadMiddleware.single("image"), adminController.uploadProductImage);
 router.get("/orders", adminController.listOrders);
 router.patch("/orders/:id", adminController.updateOrder);
+router.patch("/settings", settingsController.update);
 
 export default router;

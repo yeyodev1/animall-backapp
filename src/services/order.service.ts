@@ -1,4 +1,5 @@
-import { STORES, isStoreKey } from "../config/stores";
+import { isStoreKey } from "../config/stores";
+import { getWhatsapp } from "./settings.service";
 import { CustomError } from "../errors/customError.error";
 import { ORDER_STATUSES, Order, OrderStatus } from "../models/order.model";
 import { Product } from "../models/product.model";
@@ -86,8 +87,8 @@ export async function create(input: OrderInput) {
     total,
   });
 
-  const store = STORES[input.store];
-  const whatsappUrl = `https://wa.me/${store.whatsapp}?text=${encodeURIComponent(whatsappMessage(order))}`;
+  const number = (await getWhatsapp())[input.store];
+  const whatsappUrl = `https://wa.me/${number}?text=${encodeURIComponent(whatsappMessage(order))}`;
   return { order, whatsappUrl };
 }
 

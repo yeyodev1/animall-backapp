@@ -4,6 +4,7 @@ import healthRoutes from "./health.routes";
 import productRoutes from "./product.routes";
 import orderRoutes from "./order.routes";
 import adminRoutes from "./admin.routes";
+import settingsRoutes from "./settings.routes";
 
 function routerApi(app: Application) {
   const router = express.Router();
@@ -13,6 +14,7 @@ function routerApi(app: Application) {
   router.use("/auth", authRoutes);
   router.use("/products", productRoutes);
   router.use("/orders", orderRoutes);
+  router.use("/settings", settingsRoutes);
   router.use("/admin", adminRoutes);
 }
 
