@@ -8,6 +8,10 @@ const settingsSchema = new Schema(
       fiorella: { type: String, default: "" },
       americas: { type: String, default: "" },
     },
+    enabled: {
+      fiorella: { type: Boolean, default: true },
+      americas: { type: Boolean, default: true },
+    },
   },
   { timestamps: true },
 );

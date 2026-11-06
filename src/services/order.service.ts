@@ -1,5 +1,5 @@
 import { isStoreKey } from "../config/stores";
-import { getWhatsapp } from "./settings.service";
+import { getSettings } from "./settings.service";
 import { CustomError } from "../errors/customError.error";
 import { ORDER_STATUSES, Order, OrderStatus } from "../models/order.model";
 import { Product } from "../models/product.model";
@@ -44,6 +44,8 @@ export async function create(input: OrderInput) {
   if (name.length < 2) throw new CustomError("Escribe tu nombre", 400);
   if (phone.replace(/\D/g, "").length < 7) throw new CustomError("Escribe un teléfono válido", 400);
   if (!isStoreKey(input.store)) throw new CustomError("Elige a dónde enviar el pedido", 400);
+  const settings = await getSettings();
+  if (!settings.enabled[input.store]) throw new CustomError("Ese número ya no recibe pedidos, elige otro", 400);
   if (!Array.isArray(input.items) || input.items.length === 0) {
     throw new CustomError("Tu carrito está vacío", 400);
   }
@@ -87,7 +89,7 @@ export async function create(input: OrderInput) {
     total,
   });
 
-  const number = (await getWhatsapp())[input.store];
+  const number = settings.whatsapp[input.store];
   const whatsappUrl = `https://wa.me/${number}?text=${encodeURIComponent(whatsappMessage(order))}`;
   return { order, whatsappUrl };
 }
